@@ -6,8 +6,9 @@ const router = express.Router();
 import { requireSignin } from "../middlewares";
 
 // controllers
-import { uploadImage } from "../controllers/course";
+import { uploadImage, removeImage } from "../controllers/course";
 
 router.post("/course/upload-image", uploadImage);
+router.post("/course/remove-image", removeImage);
 
 module.exports = router;
