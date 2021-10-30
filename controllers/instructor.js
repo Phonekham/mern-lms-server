@@ -32,3 +32,16 @@ export const makeInstructor = async (req, res) => {
     console.log("MAKE INSTRUCTOR ERR ", err);
   }
 };
+
+export const currentInstructor = async (req, res) => {
+  try {
+    let user = await User.findById(req.user._id).select("-password").exec();
+    if (!user.role.includes("Instructor")) {
+      return res.status(403);
+    } else {
+      res.json({ ok: true });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
