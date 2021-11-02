@@ -15,6 +15,7 @@ import {
   uploadVideo,
   removeVideo,
   addLesson,
+  update,
 } from "../controllers/course";
 
 // Image
@@ -24,6 +25,7 @@ router.post("/course/remove-image", removeImage);
 // Course
 router.post("/course", requireSignin, isInstructor, create);
 router.get("/course/:slug", read);
+router.put("/course/:slug", requireSignin, update);
 router.post(
   "/course/video-upload/:instructorId",
   requireSignin,
