@@ -18,6 +18,8 @@ import {
   update,
   removeLesson,
   updateLesson,
+  publishCourse,
+  unpublishCourse,
 } from "../controllers/course";
 
 // Image
@@ -34,6 +36,8 @@ router.post(
   formidable(),
   uploadVideo
 );
+router.put("/course/publish/:courseId", requireSignin, publishCourse);
+router.put("/course/unpublish/:courseId", requireSignin, unpublishCourse);
 router.post("/course/video-remove/:instructorId", requireSignin, removeVideo);
 router.post("/course/lesson/:slug/:instructorId", requireSignin, addLesson);
 router.put("/course/:slug/:lessonId", requireSignin, removeLesson);
