@@ -22,6 +22,8 @@ import {
   unpublishCourse,
   courses,
   readPublic,
+  checkEnrollment,
+  freeEnrollment,
 } from "../controllers/course";
 
 // Image
@@ -46,5 +48,7 @@ router.post("/course/lesson/:slug/:instructorId", requireSignin, addLesson);
 router.put("/course/:slug/:lessonId", requireSignin, removeLesson);
 router.post("/course/lesson/:courseId/:lessonId", requireSignin, updateLesson);
 router.get("/courses", courses);
+router.get("/check-enrollment/:courseId", requireSignin, checkEnrollment);
+router.post("/free-enrollment/:courseId", requireSignin, freeEnrollment);
 
 module.exports = router;

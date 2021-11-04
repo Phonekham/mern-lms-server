@@ -4,6 +4,7 @@ import slugify from "slugify";
 import { readFileSync } from "fs";
 
 import Course from "../models/course";
+import User from "../models/user";
 
 const awsConfig = {
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -334,5 +335,44 @@ export const readPublic = async (req, res) => {
     res.json(course);
   } catch (err) {
     console.log(err);
+  }
+};
+
+export const checkEnrollment = async (req, res) => {
+  const { courseId } = req.params;
+  // find courses of the currently logged in user
+  const user = await User.findById(req.user._id).exec();
+  // check if course id is found in user courses array
+  let ids = [];
+  for (let i = 0; i < user.courses.length; i++) {
+    ids.push(user.courses[i].toString());
+  }
+  res.json({
+    status: ids.includes(courseId),
+    course: await Course.findById(courseId).exec(),
+  });
+};
+
+export const freeEnrollment = async (req, res) => {
+  try {
+    // check if course is free or paid
+    const course = await Course.findById(req.params.courseId).exec();
+    if (course.paid) return;
+
+    const result = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $addToSet: { courses: course._id },
+      },
+      { new: true }
+    ).exec();
+    console.log(result);
+    res.json({
+      message: "Congratulations! You have successfully enrolled",
+      course,
+    });
+  } catch (err) {
+    console.log("free enrollment err", err);
+    return res.status(400).send("Enrollment create failed");
   }
 };
