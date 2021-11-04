@@ -310,3 +310,29 @@ export const unpublishCourse = async (req, res) => {
     return res.status(400).send("Unpublish course failed");
   }
 };
+
+export const courses = async (req, res) => {
+  // console.log("all courses");
+  const all = await Course.find({ published: true })
+    .limit(11)
+    // .select("-lessons")
+    .populate("instructor", "_id name")
+    // .populate("categories", "_id name")
+    .exec();
+  console.log("============> ", all);
+  res.json(all);
+};
+
+export const readPublic = async (req, res) => {
+  // console.log("req.params.slug", req.params.slug);
+  try {
+    let course = await Course.findOne({ slug: req.params.slug })
+      .populate("instructor", "_id name")
+      // .populate("categories")
+      .exec();
+    // console.log("COURSE PUBLIC READ => ", course);
+    res.json(course);
+  } catch (err) {
+    console.log(err);
+  }
+};

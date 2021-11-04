@@ -20,6 +20,8 @@ import {
   updateLesson,
   publishCourse,
   unpublishCourse,
+  courses,
+  readPublic,
 } from "../controllers/course";
 
 // Image
@@ -30,6 +32,7 @@ router.post("/course/remove-image", removeImage);
 router.post("/course", requireSignin, isInstructor, create);
 router.get("/course/:slug", read);
 router.put("/course/:slug", requireSignin, update);
+router.get("/course/public/:slug", readPublic);
 router.post(
   "/course/video-upload/:instructorId",
   requireSignin,
@@ -42,5 +45,6 @@ router.post("/course/video-remove/:instructorId", requireSignin, removeVideo);
 router.post("/course/lesson/:slug/:instructorId", requireSignin, addLesson);
 router.put("/course/:slug/:lessonId", requireSignin, removeLesson);
 router.post("/course/lesson/:courseId/:lessonId", requireSignin, updateLesson);
+router.get("/courses", courses);
 
 module.exports = router;
